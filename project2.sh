@@ -5,18 +5,34 @@
 
 ## Writing a script to automate Jenkins Configuration
 
-#installation of wget
-echo "installing wget"
-yum install wget -y
+
+#Installation of java 1.8
+echo "Installing Java-1.8.0"
+yum install java-1.8.0-openjdk-devel -y
 
 #enable jenkins
+echo "Enable Jenkins!!!!"
 wget -O /etc/yum.repos.d/jenkins.repo http://pkg.jenkins-ci.org/redhat/jenkins.repo
 
-#now, disable key check on the repo
+#installation of wget
+ls -l /usr/bin | grep -q wget
+if 
+    [ $? -eq 0]
+
+then 
+    echo "You already have wget.."
+
+else 
+    echo "installing wget"
+    yum install wget -y
+fi
+
+#Now, disable key check on the repo
+echo "Enabling..."
 sed -i 's/gpgcheck=1/gpgcheck=0/g' /etc/yum.repos.d/jenkins.repo
 
 #installation of jenkins
-echo "installing jenkins"
+echo "installing jenkins!!"
 yum install jenkins -y
 
 #starting jenkins service
@@ -31,10 +47,10 @@ sleep 2
 systemctl enable jenkins
 sleep 5
 
+echo "Adjusting the firewall"
 firewall-cmd --permanent --zone=public --add-port=8080/tcp  
 firewall-cmd --reload
-echo "the ip and port will be displayed. with syntax <ip:port>"
+
 sleep 3
-ifconfig | grep 192
-cat /var/lib/jenkins/secrets/initialAdminPassword
+ifconfig
 
